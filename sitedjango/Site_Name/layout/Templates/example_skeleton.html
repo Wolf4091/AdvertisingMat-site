@@ -1,0 +1,403 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet"  href="{% static "css/startbootstrap-grayscale-gh-pages/vendor/bootstrap/css/bootstrap.css" %}">
+
+    <!-- Custom fonts for this template -->
+    <link href="{% static "css/startbootstrap-grayscale-gh-pages/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" %}" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Cabin:700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/startbootstrap-grayscale-gh-pages/css/grayscale.css" %}" rel="stylesheet">
+
+
+    <title>{% block title %}{% endblock title %}{% block title-page %}{% endblock title-page %}</title>
+
+    {% block meta %}{% endblock meta %}
+
+    <link rel="stylesheet" type="text/css" media="print" href="{% static "zinnia/theme/css/print.css" %}" /-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet"  href="{% static "css/userpagetest.css" %}">
+    {% block extracss %}{% endblock extracss %}
+    {% block link %}{% endblock link %}
+    {% block script %}{% endblock script %}
+  </head>
+
+<body id="page-top">
+
+ <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        {% if user.is_staff %}
+        <a class="navbar-brand" style="color: #42dca3"href="/admin/">Admin</a>
+        {% endif %}
+        <!-- Breadcrumbs <a class="navbar-brand" href="">Top</a> -->
+        {% block breadcrumbs %}
+        {% block breadcrumbsnew %}
+        {% endblock breadcrumbsnew %}
+        {% endblock breadcrumbs %}
+        <!-- End Breadcrumbs -->
+        <button class="navbar-toggler navbar-toggler-right collapsed" id="navtogglerbutton" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarResponsive" aria-expanded="false" style="">
+          <ul class="navbar-nav ml-auto">
+              {% block navtop %}
+              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#page-top">Top</a></li>
+              {% endblock navtop %}
+            <li class="nav-item">
+              {% block nav1 %}{% endblock nav1 %}
+            </li>
+            <li class="nav-item">
+              {% block nav2 %}{% endblock nav2 %}
+            </li>
+            <li class="nav-item">
+              {% block nav3 %}{% endblock nav3 %}
+            </li>
+            {% block discord %}
+            <li class="nav-item"><a style="color: #4d72ef;"class="nav-link" data-toggle="modal" href="#discordmodal">Discord</a></li>
+            {% endblock discord %}
+            {% block rtcChat %}
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a style="color: blue;"class="nav-link" href="/rtcChat/{{ user.username }}">CHAT</a></li>
+            {% endif %}
+            {% endblock rtcChat %}
+            {% block accountdrop %}
+            <div class="flexwrap">
+              <div class="panel-heading">
+                <div class="panel-title">
+                  <a class="nav-link navautomation" data-toggle="collapse" href="#collapse1">Account</a>
+                </div>
+              </div>
+
+              <div id="collapse1" class="panel-collapse collapse">
+                <ul class="list-group account-drop">
+                  {% if user.is_authenticated %}
+                  <li class="list-group-item nav-item"><a class="nav-link" href="/user/{{ user.username }}">My Page</a></li>
+                  {% endif %}
+                  {% block accountwidgets %}
+                  {% endblock accountwidgets %}
+                  {% if not user.is_authenticated %}
+                  <li class="list-group-item nav-item"><a class="nav-link" data-toggle="modal" href="#loginmodal">Login</a></li>
+                  <li class="list-group-item nav-item"><a class="nav-link" data-toggle="modal" href="#registermodal">Register</a></li>
+                  {% endif %}
+                  {% if user.is_authenticated %}
+                  <li class="list-group-item nav-item"><a class="nav-link" href="/logout">LogOut</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+            {% endblock accountdrop %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+<!------------------>
+
+    <!-- Intro Header -->
+    <header class="masthead">
+      <div class="intro-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h1 class="brand-heading">
+            {% block page-header %}Idevops{% endblock page-header %}
+        </h1>
+        {% block change_userimage %}{% endblock change_userimage %}
+        {% block page_image %}{% endblock page_image %}
+
+        <blockquote>
+         <p class="intro-text">{% block intro %}{% endblock intro %}</p>
+        </blockquote>
+<div id="content" class="hfeed" role="main">
+{% block content %}
+{% endblock content %}
+</div>
+{% if user.is_authenticated is not True %}
+  <!--Login Modal-->
+  <div>
+    <div class="modal fade" id="loginmodal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <p class="modal-title">Login</p>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body loginmodal">
+            <form role="form" method="POST" action="/login/">{% csrf_token %}
+              <fieldset>
+                <div class="form-group">
+                  <input class="form-control" placeholder="Username" id="username" name="username" type="text" autofocus>
+                </div>
+                <div class="form-group">
+                  <input class="form-control" placeholder="Password" id="password" name="password" type="password" value="">
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input name="remember" class="form-check-input" type="checkbox" value="Remember Me">Remember Me
+                  </label>
+                </div>
+                <!-- Change this to a button or input when using this as a form -->
+                <button style="margin-top:10px; margin-bottom:10px;" id="login-button" class="btn btn-success btn-sm">Login</button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- login ajax -->
+<script type="text/javascript">
+  $(document).on('click','#login-button',function(e){
+    e.preventDefault();
+    $('.alert-danger').remove();
+
+    $.ajax({
+      type:'POST',
+      url:'/login/',
+      data:{
+        username:$('#username').val(),
+        password:$('#password').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),},
+      success:function(data){
+        if ($.trim(data)) {
+          var awsm = document.createElement("i");
+          $( awsm ).addClass( "fa fa-exclamation-triangle" );
+          var strong = document.createElement("strong");
+          var warn = document.createTextNode(data.alert.toString());
+          strong.appendChild(warn);
+          var node = document.createElement("div");
+          var note = document.createTextNode(data.respond.toString());
+          node.appendChild(awsm);
+          node.appendChild(strong);
+          node.appendChild(note);
+          $( node ).addClass( "alert alert-danger" );
+          document.getElementsByClassName("loginmodal")[0].appendChild(node);
+        }
+        else{
+          window.location.href = "/user/" + $('#username').val();
+        }
+      },
+    });
+  });
+</script>
+  <!-- Register Modal -->
+  <div>
+    <div class="modal fade" id="registermodal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+          <p class="modal-title">Register</p>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body registermodal">
+            <form role="form" method="POST" action="/create_user/" enctype="multipart/form-data">{% csrf_token %}
+              <fieldset>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Firstname" id="Firstname" name="Firstname" name="Firstname" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Lastname" id="Lastname" name="Lastname" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Address" id="Address" name="Address" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="City" id="City" name="City" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Zip" id="Zip" name="Zip" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Email" id="Email" name="Email" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Phone" id="Phone" name="Phone" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Username" id="usernamereg" name="username" type="text" autofocus>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Password" id="passwordreg" name="password" type="password" value="">
+                      </div>
+                      <div class="form-group">
+                        <textarea class="form-control" placeholder="Application (4000 char max)" id="application" name="application" type="text" rows="8"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <img id="image" class="profile" src="{% static "images/default-image.jpg" %}" style="padding:1px;" width="150" height="150">
+                        <input class="form-control" id="imageurl" type="url" onchange="changer()" name="Userimage" accept=".JPG, .jpeg, .jpg, .JPEG, .bmp, .BMP, .gif, .GIF, .png, .PNG" placeholder="Paste Image Url Here"/>
+                      </div>
+
+                                  <!-- Change this to a button or input when using this as a form -->
+                      <button style="margin-top:10px; margin-bottom:10px;" id="register-button" class="btn btn-success btn-sm">Sign up</button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Register Ajax -->
+<script type="text/javascript">
+  $(document).on('click','#register-button',function(e){
+    e.preventDefault();
+    $('.alert-danger').remove();
+
+    $.ajax({
+      type:'POST',
+      url:'/create_user/',
+      data:{
+        Firstname:$('#Firstname').val(),
+        Lastname:$('#Lastname').val(),
+        Address:$('#Address').val(),
+        City:$('#City').val(),
+        Zip:$('#Zip').val(),
+        Email:$('#Email').val(),
+        Phone:$('#Phone').val(),
+        username:$('#usernamereg').val(),
+        password:$('#passwordreg').val(),
+        application:$('#application').val(),
+        Userimage:$('#imageurl').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),},
+      success:function(data){
+        if ($.trim(data)) {
+          var awsm = document.createElement("i");
+          $( awsm ).addClass( "fa fa-exclamation-triangle" );
+          var strong = document.createElement("strong");
+          var warn = document.createTextNode(data.alert.toString());
+          strong.appendChild(warn);
+          var node = document.createElement("div");
+          var note = document.createTextNode(data.respond.toString());
+          node.appendChild(awsm);
+          node.appendChild(strong);
+          node.appendChild(note);
+          $( node ).addClass( "alert alert-danger" );
+          document.getElementsByClassName("registermodal")[0].appendChild(node);
+        }
+        else{
+          window.location.href = "/"
+        }
+      },
+    });
+  });
+</script>
+{% endif %}
+<!--Discord Modal-->
+<div>
+  <div class="modal fade" id="discordmodal" role="dialog">
+    <div class="modal-dialog drad">
+      <!-- Modal content-->
+      <div class="modal-content drad">
+        <iframe class="drad dbord" src="https://discordapp.com/widget?id=378333851656912899&theme=dark" width="100%" height="400" allowtransparency="true" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        {% block modals %}
+        {% endblock modals %}
+
+
+              <!--a href="#1" class="btn btn-circle js-scroll-trigger">
+                <i class="fa fa-angle-double-down animated"></i-->
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+
+{% block nosection1 %}
+<!--To make the nosection work, just initiate and end the block with nothing in-between-->
+
+    <!-- Section 1 -->
+    <section id={% block navto1 %}"1"{% endblock navto1 %} class="content-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+          {% block section1 %}
+          {% endblock section1 %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock nosection1 %}
+{% block nosection2 %}
+
+    <!-- Section 2 -->
+    <section id={% block navto2 %}"2"{% endblock navto2 %} class="content-section content-section text-center">
+      <div class="container">
+       <div class="row">
+        <div class="col-lg-8 mx-auto">
+        {% block section2 %}
+        {% endblock section2 %}
+        </div>
+       </div>
+      </div>
+    </section>
+{% endblock nosection2 %}
+
+{% block nosection3 %}
+    <!-- Section 3 -->
+    <section id={% block navto3 %}"3"{% endblock navto3 %} class="content-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+          {% block section3 %}
+	  {% endblock section3 %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock nosection3 %}
+
+{% block map %}
+ <!-- Map Section -->
+    <div id="map"></div>
+{% endblock map %}
+    <!-- Footer -->
+    <footer>
+      <div class="container text-center">
+        <p>Copyright &copy; Your Website 2017</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static "css/startbootstrap-grayscale-gh-pages/vendor/jquery/jquery.min.js" %}"></script>
+    <script src="{% static "css/startbootstrap-grayscale-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+
+    <!-- Fontawesome CDN (icons) -->
+    <script src="https://use.fontawesome.com/8d9c8205ad.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static "css/startbootstrap-grayscale-gh-pages/vendor/jquery-easing/jquery.easing.min.js" %}"></script>
+
+{% block mapapi %}
+       <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_KulZsK6HmXfoC8hXMVhVH0PBim62up4"></script>
+{% endblock mapapi %}
+
+    <!-- Custom scripts for this template -->
+    <script src="{% static "css/startbootstrap-grayscale-gh-pages/js/grayscale.min.js" %}"></script>
+
+  </body>
+
+</html>
