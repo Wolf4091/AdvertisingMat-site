@@ -83,6 +83,26 @@ img {vertical-align: middle;}
 .active, .dot:hover {
   background-color: #717171;
 }
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+    color: #f1f1f1;
+}
+/* Add an active class to the active dropdown button */
+.active {
+    background-color: green;
+    color: white;
+}
+/* Some media queries for responsiveness */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+/* Main content */
+.main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+    font-size: 20px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
 
 /* Fading animation */
 .fade {
@@ -118,12 +138,12 @@ img {vertical-align: middle;}
   <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
     <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">Banners<i class="fa fa-caret-down"></i>
     </a>
-    <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-      <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Retractable</a>
-      <a href="#" class="w3-bar-item w3-button">X-Stand</a>
-      <a href="#" class="w3-bar-item w3-button">Pole Banner</a>
-      <a href="#" class="w3-bar-item w3-button">Tension Displays</a>
-    </div>
+      <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Retractable</a>
+        <a href="#" class="w3-bar-item w3-button">X-Stand</a>
+        <a href="#" class="w3-bar-item w3-button">Pole Banner</a>
+        <a href="#" class="w3-bar-item w3-button">Tension Displays</a>
+      </div>
     <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">Advertising Flags<i class="fa fa-caret-down"></i>
     </a>
     <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
@@ -371,6 +391,23 @@ img {vertical-align: middle;}
 
 <script>
 // Accordion 
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+/*Slider script
+*/
 var slideIndex = 0;
 showSlides();
 
